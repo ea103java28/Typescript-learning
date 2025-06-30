@@ -197,7 +197,128 @@ const live2 = new Live2('live2')
 // console.log(live2.#name); // 訪問不到
 console.log(live2); //看不到 name
 
+interface CarProps { // 可以 export 出去，給大家實作
+    name: string
+    age: number
+    start: () => void
+}
 
+
+// export interface CarProps { // 可以 export 出去，給大家實作
+//     name: string
+//     age: number
+//     start: () => void
+// }
+
+class Car implements CarProps {
+    name: string
+    age: number;
+
+
+    constructor(name: string, age: number) {
+        this.name = name
+        this.age = age
+    }
+
+    start() { }
+}
+
+
+
+// ---------------- 泛型 --------------
+
+// 如果希望函式參數有多種類型的話 可以用泛型
+function print<T>(data: T) {
+    console.log({ data });
+}
+
+console.log(print<number>(9999));
+console.log(print('xxxx'));
+
+
+class Print<T> {
+    data: T
+    constructor(d: T) {
+        this.data = d
+    }
+}
+
+const nnn = new Print<number>(8888)
+const str = new Print('yyyyyy')
+console.log({ nnn, str });
+
+
+// ---------------- typescript utility --------------
+
+//https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
+
+type CatName = "miffy" | "boris" | "mordred";
+
+
+// Record
+interface CatInfo {
+    age: number;
+    breed: string;
+}
+
+// key, value
+const cats: Record<CatName, CatInfo> = {
+    miffy: { age: 10, breed: "Persian" },
+    boris: { age: 5, breed: "Maine Coon" },
+    mordred: { age: 16, breed: "British Shorthair" },
+};
+
+console.log(cats);
+
+type Myname = "xxx" | "yyy" | "zzz"
+
+const obj1: Record<Myname, boolean> = {
+    xxx: false,
+    yyy: false,
+    zzz: true
+}
+
+// key 變成可選的
+const obj3: Partial<Record<Myname, boolean>> = {
+    xxx: false,
+}
+
+
+// Pick
+
+interface Todo {
+    title: string;
+    description: string;
+    completed: boolean;
+}
+
+// 可以從 interface pick 出自己要的
+type TodoPreview = Pick<Todo, "title" | "completed">;
+
+const todo: TodoPreview = {
+    title: "Clean room",
+    completed: false,
+    //   description: 'xxxxx' // 因為沒有被 PICK 也無法引用
+};
+
+
+
+// Omit 過濾
+interface Todo {
+    title: string;
+    description: string;
+    completed: boolean;
+    createdAt: number;
+}
+
+// 過濾掉不要的，再組成新的 type
+type TodoPreview2 = Omit<Todo, "description">;
+
+const todo2: TodoPreview2 = {
+    title: "Clean room",
+    completed: false,
+    createdAt: 1615544252770,
+};
 
 
 
